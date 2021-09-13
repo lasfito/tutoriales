@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="contenedor">
+      <form class="calculadora" name="calcu">
+        <input type="text" readonly class="resultado" name="res" />
+        <span class="tecla clear" onclick="document.calcu.res.value = ''  ">
+          C
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '/'  ">
+          /
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '*'  ">
+          *
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '7'  ">
+          7
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '8'  ">
+          8
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '9'  ">
+          9
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '-'  ">
+          -
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '4'  ">
+          4
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '5'  ">
+          5
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '6'  ">
+          6
+        </span>
+        <span class="tecla mas" onclick="document.calcu.res.value += '+'  ">
+          +
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '1'  ">
+          1
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '2'  ">
+          2
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '3'  ">
+          3
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '0'  ">
+          0
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '00'  ">
+          00
+        </span>
+        <span class="tecla" onclick="document.calcu.res.value += '.'  ">
+          .
+        </span>
+        <span
+          class="tecla igual"
+          onclick="document.calcu.res.value = eval(document.calcu.res.value)  "
+        >
+          =
+        </span>
+      </form>
+    </div>
+  </body>
+</html>
