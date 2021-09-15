@@ -1,0 +1,33 @@
+* {
+  font-size: 18px;
+  background-color: rgb(246, 247, 240);
+  line-height: 1.55rem;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+p {
+  margin-top: 0;
+}
+
+.columnas {
+  columns: 300px;
+  column-rule: 2px solid black;
+  column-gap: 4rem;
+  /* column-count:3;
+   
+    columns: ;
+    column-span: ;
+    column-rule; */
+  /* column-width: 300px; */
+}
+
+/* .intro {
+  column-span: all;
+}
+
+.desenlace {
+  column-span: all;
+} */
