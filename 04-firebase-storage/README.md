@@ -1,70 +1,196 @@
-# Getting Started with Create React App
+Cada imagen o archivo que cargas en línea debe almacenarse en algún lugar. Son los proveedores de almacenamiento en la nube (como Amazon y Google Cloud) quienes se encargan de almacenar esos archivos como "objetos" en "depósitos" (o **buckets**, como se conocen en inglés).
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Firebase Realtime Database**  y **Cloud Firestore** son excelentes para almacenar datos, pero no son tan buenos con los archivos. **Google Cloud Storage¨** (un servicio de Google Cloud Platform) está diseñado para almacenar y entregar estos archivos.
 
-## Available Scripts
+Firebase Storage es un "middleman" (intermediario) de G. Cloud Storage - uno, dicho sea de paso, bastante útil. 
 
-In the project directory, you can run:
+En este tutorial aprenderás como utilizar Firebase Storage para cargar y descargar archivos con React - aunque en realidad podrías utilizar lo aquí aprendido con cualquier otro framework o incluso JavaScript puro. 
 
-### `npm start`
+## Requisitos
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Antes de entrar de lleno al código son necesarios un par de pasos previos. 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Tener [Node](https://nodejs.org/es/) instalado 
+2. Instalar el [Firebase CLI](https://firebaseopensource.com/projects/firebase/firebase-tools/)
 
-### `npm test`
+   `npm install -g firebase-tools`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**Nota:** Puedes encontrar [aquí](https://github.com/lasfito/tutoriales/tree/master/04-firebase-storage) el repositorio para este tutorial.
 
-### `npm run build`
+## Create-react-app
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Lo primero es crear un proyecto de React con create-react-app. Este no es un tutorial para ello, si gustas puedes echar un vistazo a la documentación de [React](https://create-react-app.dev/docs/getting-started) 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+O bien, puedes abrir alguna carpeta desde VS Code y en la terminal integrada ejecutar:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+`npx create-react-app my-app`
 
-### `npm run eject`
+Ojo:  **my-app** es el nombre de tu proyecto. 
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Después, ejecuta `cd my-app` y estamos listos para comenzar (no olvides abrir el folder también desde vs code). 
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Proyecto Firebase
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Lo segundo es crear un proyecto en la [consola de Firebase](console.firebase.google.com). Una vez creado (toma unos cuantos segundos), desde el panel lateral creamos una instancia de *Firebase* y una de *Storage*.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+No olvides iniciar la instancia de Firestore en modo prueba.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Inicializar Firebase en React
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Lo siguiente es dirigirnos a VS Code y desde la terminal ejecutar:
 
-### Code Splitting
+ `firebase init` 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Esto iniciará un asistente, dentro del cual debemos:
 
-### Analyzing the Bundle Size
+1. Seleccionar las opciones de Firestore y Storage
+2. Escoger la opción de proyecto existente (y elegir el que acabamos de crear)
+3. Elige los nombres por defecto para los archivos de reglas
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Con ello concluirá el asistente. El siguiente paso es crear una aplicación dentro de nuestro proyecto. Para ello, desde la terminal integrada ejecuta:
 
-### Making a Progressive Web App
+`firebase apps:create`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Elige la opción de web.
+Esto creará y enlazará la app con tu proyecto. Recibirás en pantalla un comando para obtener las credenciales de acceso. Ejecútalo y copia las credenciales que se mostrarán en pantalla. 
 
-### Advanced Configuration
+Lo siguiente es crear un archivo en src y pegar ahí las credenciales. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Guarda la función de las credenciales una constante llamada app y expórtala con  `export` escrito antes de la declaración:
 
-### Deployment
+```javascript
+  export const app = firebase.initializeApp({
+    "projectId": "fir-storage-lasfito",
+    "appId": "1:713168404204:web:b359856ef667ac2287efc9",
+    "storageBucket": "fir-storage-lasfito.appspot.com",
+    "locationId": "us-central",
+    "apiKey": "AIzaSyDj2SX0BXqftSsEjSw1JYz-xEiOaqdKAF8",
+    "authDomain": "fir-storage-lasfito.firebaseapp.com",
+    "messagingSenderId": "713168404204"
+  });
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+Después, en ese mismo archivo, importa Firebase y los módulos de Firestore y Storage:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+```javascript
+import firebase from "firebase/compat/app"
+import "firebase/compat/storage"
+import "firebase/compat/firestore"
+```
+
+
+No olvides instalar firebase con:
+`npm install firebase`
+
+
+Para terminar, modificaremos las reglas de Storage para nuestro proyecto. 
+Dirígete el archivo de **storage.rules** y modifica el if para escribir y leer de la siguiente manera:
+
+`allow read, write: if true`
+
+Después de ello, carga los cambios ejecutando:
+
+`firebase deploy --only storage`
+
+## Carga de archivos con Firebase Storage
+
+Primeramente, importa el archivo en el cual tienes tus credenciales de la siguiente manera: 
+
+`import {app} from "./fb"`
+
+Para cargar archivos utilizaremos una forma:
+
+```javascript
+<form onSubmit={submitHandler}  >
+      <input type="file" onChange={archivoHandler} />
+      <input type="text" name="nombre" placeholder="nombra tu archivo" />
+      <button>Enviar </button>
+       </form>
+```
+
+Nota que en el input de tipo archivo tenemos una función llamada archivoHandler. 
+La función luce así:
+
+```javascript
+const archivoHandler = async (e)=> {
+
+    const archivo = e.target.files[0];
+    const storageRef = app.storage().ref();
+    const archivoPath = storageRef.child(archivo.name);
+    await archivoPath.put(archivo);
+    console.log("archivo cargado:",archivo.name);
+    const enlaceUrl = await archivoPath.getDownloadURL();
+    setArchivoUrl(enlaceUrl);
+
+  }
+```
+
+El código  funciona así:
+
+1. Creamos una referencia al archivo seleccionado del input y lo guardamos en la constante archivo
+2. Creamos una referencia al servicio de Firebase Storage en `const storageRef`
+3. Creamos un *path* previo a cargar al archivo en const `archivoPath`
+4. Colocamos nuestro archivo en ese path con el método *put*
+5. Obtenemos la url de descarga con el método *getDownloadUrl* y la guardamos en un *state*
+
+Con esto ya estaremos cargando archivos a Firebase Storage. Lo siguiente es guardar en Firestore la referencia al nombre del archivo y la url para descargarlo. 
+
+## Guardar la url de los archivos en Firestore
+
+Una vez guardada la Url de los archivos en un *state*, procederemos a guardarla en nuestra base de datos junto con un nombre ingresado por el usuario. Para ello, ejecutaremos la siguiente función al momento de que el usuario haga **submit**.
+
+```javascript
+  const submitHandler = async (e)=> {
+    e.preventDefault()
+const nombreArchivo = e.target.nombre.value;
+if (!nombreArchivo) {
+  alert("coloca un nombre")
+  return
+}
+const coleccionRef =  app.firestore().collection("archivos");
+const docu = await coleccionRef.doc(nombreArchivo).set({nombre: nombreArchivo, url: archivoUrl});
+console.log("archivo cargado:", nombreArchivo, "ulr:", archivoUrl);
+window.location="/"
+
+  }
+```
+
+1. Como requisito debemos crear alguna colección en Firestore
+2. Primero prevenimos la recarga de página con e.preventDefault
+3. Recogemos el nombre que ingresó el usuario en el input de texto
+4. (opcional) Crea una validación para que el campo no esté en blanco
+5. Creamos una referencia a la colección que creamos en Firestore ("archivos" en mi caso)
+6. Creamos un registro (documento) con el método **doc** y **set**
+7. Actualizamos la página con window.location
+
+Ahora que hemos creado los registros, es momento de mostrar el contenido de los archivos en nuestra aplicación de React. 
+
+## Mostrar archivos en aplicación
+
+Lo primero es obtener todos los documentos y guardarlos en un **state** con ayuda de **useEffect**
+
+```javascript
+React.useEffect(async ()=>{
+    const docusList = await app.firestore().collection("archivos").get();
+    setDocus(docusList.docs.map((doc)=> doc.data()));
+   
+  }, [])
+```
+
+Luego, en nuestra interfaz mapea los documentos y retornalos en alguna lista
+
+```javascript
+<ul>
+         {docus.map((doc)=> <li><h3>{doc.nombre}</h3><img src={doc.url} height="100px" width="100px" /></li>)}
+       </ul>
+```
+
+## Conclusiones
+
+Firebase Storage es un servicio por demás útil y sencillo. Estoy seguro de que podrá servirte en más de una ocasión. 
+
+Si te han quedado dudas, puedes revisar el [repositorio](https://github.com/lasfito/tutoriales/tree/master/04-firebase-storage) o preguntarme en los comentarios.
