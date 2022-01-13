@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.rerender {
+  animation: rerender 1s linear forwards;
+}
+
+.component {
+  animation: blink 1s ease-out forwards;
+}
+
+@keyframes rerender {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes blink {
+  0% {
+    background-color: #0f172a;
+  }
+  50% {
+    background-color: #000;
+  }
+  100% {
+    background-color: #0f172a;
+  }
+}
