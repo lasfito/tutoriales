@@ -1,0 +1,57 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  place-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+}
+
+/* Spinning Curved Text */
+
+.spinning-text-wrapper {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.spinning-text {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  animation: spin 50s linear infinite;
+}
+
+.spinning-text span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform-origin: 0 300px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinning-text-wrapper img {
+  width: 75%;
+  height: auto;
+  filter: drop-shadow(10px 10px 5px hsla(0, 0%, 0%, 0.461));
+}
