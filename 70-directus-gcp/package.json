@@ -1,0 +1,18 @@
+{
+  "name": "cms-directus-youtube",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "directus start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@directus/drive-gcs": "^9.21.2",
+    "directus": "^10.4.2",
+    "pg": "^8.11.1"
+  }
+}

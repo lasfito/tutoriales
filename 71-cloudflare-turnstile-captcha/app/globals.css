@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input {
+	@apply border border-gray-300 rounded-md shadow-sm;
+}
